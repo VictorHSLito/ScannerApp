@@ -20,7 +20,7 @@ export class AddItemUseCase {
         }
 
         catch(error) {
-            console.log("Operation couldn't be completed, some inexpected occurred:", error);
+            console.log("Operation couldn't be completed, some inexpected error occurred:", error);
             throw new Error("Some error occurred when tried to save the item, please try again!");
         }
     }
