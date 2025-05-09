@@ -13,8 +13,8 @@ export class SQLiteItemRepository implements IItemRepository {
             return item;
         } catch (error) {
             console.log("There was a problem when tried to save item: ", error);
-        }
-        throw new Error("Method not implemented.");
+            throw new Error("Method not implemented.");
+        }   
     }
 
     async listItems(): Promise<Item[] | null> {
@@ -23,8 +23,8 @@ export class SQLiteItemRepository implements IItemRepository {
             return (await models).map(ItemMapper.toEntity);
         } catch (error) {
             console.log();
-        }
-        throw new Error("Method not implemented.");
+            throw new Error("Method not implemented.");
+        }     
     }
 
 
@@ -32,9 +32,8 @@ export class SQLiteItemRepository implements IItemRepository {
         try {
             await this.dataSource.removeItem(id);
         } catch (error) {
-
+            throw new Error("Method not implemented.");
         }
-        throw new Error("Method not implemented.");
     }
     
     
@@ -42,9 +41,8 @@ export class SQLiteItemRepository implements IItemRepository {
         try {
             await this.dataSource.clearItems();
         } catch (error) {
-            
+            throw new Error("Method not implemented.");
         }
-        throw new Error("Method not implemented.");
     }
 
 }
