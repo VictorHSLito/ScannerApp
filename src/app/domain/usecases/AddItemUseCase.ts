@@ -8,15 +8,13 @@ export class AddItemUseCase {
         this._repo = repo;
     }
 
-    save(item: Item): Promise<Item | null> {
+    async execute(item: Item): Promise<Item | null> {
         try {
             if (!item.name && !item.price && !item.quantity) {
                 throw new Error("Please provide all fields for item!");
             }
-    
-            const savedItem = this._repo.saveItem(item);
-    
-            return savedItem;
+            
+            return await this._repo.saveItem(item);;
         }
 
         catch(error) {

@@ -8,10 +8,9 @@ export class ListItemsUseCase {
         this._repo = repo;
     }
 
-    listItems(): Promise<Item[] | null> {
+    async execute(): Promise<Item[] | null> {
         try {
-            const allItems = this._repo.listItems();
-            return allItems;
+            return await this._repo.listItems();
         }
         catch (error) {
             console.log("Operation couldn't be completed, some inexpected error occurred:", error)
