@@ -6,7 +6,7 @@ export class ItemLocalDataSource {
     
     async saveItem(model: ItemModel): Promise<void> {
         const db = DataBaseHelper.connection;
-        await db.run (
+        await db.runAsync (
             `INSERT INTO items (id, name, price, quantity) VALUES (?, ?, ?, ?)`,
             model.id, model.name, model.price, model.quantity
         );
@@ -14,17 +14,17 @@ export class ItemLocalDataSource {
 
     async listItems(): Promise<ItemModel[]> { 
         const db = DataBaseHelper.connection;
-        const rows = await db.all(`SELECT * FROM items`);
+        const rows = await db.getAllAsync(`SELECT * FROM items`);
         return rows.map(ItemModel.fromMap);
     }
 
     async removeItem(id: string): Promise<void> {
         const db = DataBaseHelper.connection;
-        await db.run (`DELETE FROM items WHERE id = ?`, id);
+        await db.runAsync (`DELETE FROM items WHERE id = ?`, id);
     }
 
     async clearItems(): Promise<void> {
         const db = DataBaseHelper.connection;
-        await db.run (`DELETE FROM items`);
+        await db.runAsync (`DELETE FROM items`);
     }
 }

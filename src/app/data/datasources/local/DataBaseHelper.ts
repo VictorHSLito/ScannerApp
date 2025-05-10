@@ -1,28 +1,25 @@
-import  sqlite3  from "sqlite3";
-import {open, Database} from 'sqlite';
+import * as SQLite from 'expo-sqlite';
 
 export class DataBaseHelper { 
     // Essa classe é responsável por criar a conexão com o banco de dados
-    private static db: Database;
+    private static db: SQLite.SQLiteDatabase;
     
     static async init(): Promise<void> {
         if(!this.db) {
-            this.db = await open ({
-                filename: "name of database", // Ex: products.db
-                driver: sqlite3.Database 
-            });
+            this.db = await SQLite.openDatabaseAsync('products.db');
 
-            await this.db.exec(`CREATE TABLE IF NOT EXISTS items (
-                id PRIMARY KEY TEXT,
-                name TEXT,
-                price REAL,
-                quantity INTEGER
-                )
-            `);
+            await this.db.execAsync(`
+                CREATE TABLE IF NOT EXISTS items(
+                    id TEXT PRIMARY KEY,
+                    name TEXT,
+                    price REAL,
+                    quantity INTEGER 
+                );`
+            );
         }
     }
 
-    static get connection(): Database {
+    static get connection(): SQLite.SQLiteDatabase {
         if (!this.db) {
             throw new Error("Database not initialized.");
         }
