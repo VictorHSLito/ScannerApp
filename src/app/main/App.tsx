@@ -1,17 +1,13 @@
-import React from "react";
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from '../presentation/screens/HomeScreen';
+import React from 'react';
+import { SafeAreaView } from 'react-native';
+import ItemListScreen from '../presentation/screens/ItemListScreen';
 
-const Stack = createNativeStackNavigator();
 
 const App = () => {
-  return(
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <ItemListScreen />
+    </SafeAreaView>
   );
 };
 
