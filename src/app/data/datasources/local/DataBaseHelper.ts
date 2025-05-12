@@ -10,7 +10,7 @@ export class DataBaseHelper {
 
             await this.db.execAsync(`
                 CREATE TABLE IF NOT EXISTS items(
-                    id TEXT PRIMARY KEY,
+                    id INTEGER PRIMARY KEY,
                     name TEXT,
                     price REAL,
                     quantity INTEGER 

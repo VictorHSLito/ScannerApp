@@ -1,11 +1,11 @@
 export class ItemModel {
     // Essa classe representa como o dado é armazenado no banco
-    id: string;
+    id: number | null;
     name: string;
     price: number;
     quantity: number;
 
-    constructor(id: string, name: string, price: number, quantity: number) {
+    constructor(id: number | null, name: string, price: number, quantity: number) {
         this.id = id;
         this.name = name; 
         this.price = price;
