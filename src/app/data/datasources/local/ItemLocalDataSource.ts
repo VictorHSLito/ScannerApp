@@ -7,8 +7,8 @@ export class ItemLocalDataSource {
     async saveItem(model: ItemModel): Promise<void> {
         const db = DataBaseHelper.connection;
         await db.runAsync (
-            `INSERT INTO items (id, name, price, quantity) VALUES (?, ?, ?, ?)`,
-            model.id, model.name, model.price, model.quantity
+            `INSERT INTO items (name, price, quantity) VALUES (?, ?, ?)`,
+            model.name, model.price, model.quantity
         );
     }
 
