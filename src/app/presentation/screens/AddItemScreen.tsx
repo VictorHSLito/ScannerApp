@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Alert } from 'react-native';
 import { ItemController } from '../controllers/ItemController';
 import { ItemModel } from '../../data/model/ItemModel';
-import CustomButton from '../components/buttons/TextButton';
+import TextButton from '../components/buttons/TextButton';
+
 
 export default function AddItemScreen() {
   const [name, setName] = useState('');
@@ -12,7 +13,9 @@ export default function AddItemScreen() {
 
   const handleSave = async () => {
     try {
-      const item = new ItemModel(null, name, parseFloat(price), parseInt(quantity));
+      const parsedPrice = parseFloat(price.replace(',', '.'));
+      const parsedQuantity = parseInt(quantity)
+      const item = new ItemModel(null, name, parsedPrice, parsedQuantity);
       await controller.saveItem(item);
       Alert.alert('Sucesso', 'Item salvo com sucesso!');
     } catch (error) {
@@ -26,7 +29,7 @@ export default function AddItemScreen() {
       <TextInput placeholder="Nome" style={styles.input} onChangeText={setName} />
       <TextInput placeholder="Preço" style={styles.input} onChangeText={setPrice} keyboardType="numeric" />
       <TextInput placeholder="Quantidade" style={styles.input} onChangeText={setQuantity} keyboardType="numeric" />
-      <CustomButton title="Salvar item" onPress={handleSave} />
+      <TextButton title="Salvar item" onPress={handleSave} />
     </View>
   );
 }
