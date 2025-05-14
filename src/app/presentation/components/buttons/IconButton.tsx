@@ -3,17 +3,16 @@ import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 interface ActionButtonProps {
-  title?: string;
   onPress: () => void;
   icon?: string;
   color?: string;
 }
 
-const IconButton: React.FC<ActionButtonProps> = ({ title, onPress, icon, color = '#d9534f' }) => {
+const IconButton: React.FC<ActionButtonProps> = ({ onPress, icon}) => {
   return (
-    <TouchableOpacity style={[styles.button, { backgroundColor: color }]} onPress={onPress}>
+    <TouchableOpacity style={[styles.button]} onPress={onPress}>
       <View style={styles.content}>
-        {icon && <Icon name={icon} size={18} color="#fff" style={{ marginRight: 6 }} />}
+        {icon && <Icon name={icon} size={20} color="#fff"/>}
       </View>
     </TouchableOpacity>
   );
@@ -21,12 +20,16 @@ const IconButton: React.FC<ActionButtonProps> = ({ title, onPress, icon, color =
 
 const styles = StyleSheet.create({
   button: {
-    padding: 10,
-    borderRadius: 6,
+    width: 35,
+    height: 35,
+    justifyContent: 'center',
+    borderRadius: 8,
+    marginLeft: 8,
     alignItems: 'center',
+    backgroundColor: '#3498db',
   },
   content: {
-    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
   },
 });

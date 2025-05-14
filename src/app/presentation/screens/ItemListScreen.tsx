@@ -15,6 +15,7 @@ const ItemListScreen = () => {
       try {
         const dataSource = new ItemLocalDataSource();
         const itemsFromDb = await dataSource.listItems();
+        console.log("Items carregados: ", itemsFromDb);
         setItems(itemsFromDb); // Armazena os itens no estado
       } catch (error) {
         console.error("Erro ao carregar os itens:", error);
@@ -26,27 +27,28 @@ const ItemListScreen = () => {
 
   const renderItem = ({ item }: { item: ItemModel }) => (
     <View style={styles.itemContainer}>
-      <View>
+      <View style={styles.itemInfo}>
         <Text style={styles.itemText}>Nome: {item.name}</Text>
-        <Text style={styles.itemText}>Preço: R$ {item.price}</Text>
+        <Text style={styles.itemText}>Preço: R$ {item.price.toFixed(2)}</Text>
         <Text style={styles.itemText}>Quantidade: {item.quantity}</Text>
         <Text style={styles.itemText}>Total: R$ {(item.price * item.quantity).toFixed(2)}</Text>
       </View>
-      <IconButton
-        icon="edit"
-        onPress={() => controller.deleteItem(String(item.id))}
-      />
-      <IconButton
-        icon="delete"
-        onPress={() => controller.deleteItem(String(item.id))}
-      />
+      <View style={styles.buttonsContainer}>
+        <IconButton
+          icon="edit"
+          onPress={() => controller.deleteItem(String(item.id))}
+        />
+        <IconButton
+          icon="delete"
+          onPress={() => controller.deleteItem(String(item.id))}
+        />
+      </View>
     </View>
 
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Lista de Itens</Text>
       <FlatList
         data={items}
         renderItem={renderItem}
@@ -68,6 +70,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   itemContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     backgroundColor: '#f8f8f8',
     padding: 15,
     marginBottom: 10,
@@ -76,6 +81,13 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 16,
   },
+  itemInfo: {
+    flex: 1
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  }
 });
 
 export default ItemListScreen;
