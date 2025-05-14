@@ -1,7 +1,7 @@
-import { Item } from "../entities/Item";
-import { IItemRepository } from "../interfaces/IItemRepository";
+import { Item } from "../../entities/Item";
+import { IItemRepository } from "../../interfaces/IItemRepository";
 
-export class AddItemUseCase {
+export class AddItem {
     private _repo: IItemRepository;
 
     constructor(repo: IItemRepository) {
@@ -13,8 +13,12 @@ export class AddItemUseCase {
             if (!item.name && !item.price && !item.quantity) {
                 throw new Error("Please provide all fields for item!");
             }
-            
-            return await this._repo.saveItem(item);;
+
+            else if (item.price <= 0 || item.quantity <= 0){
+                throw new Error("Please insert a available value for item price and item quantity!");
+            }
+        
+            return await this._repo.saveItem(item);
         }
 
         catch(error) {

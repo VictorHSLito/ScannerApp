@@ -5,10 +5,10 @@ export class ItemMapper {
     // Essa classe é responsável por transformar os objetos do banco em objetos da domain
     // E vice-versa
     static toEntity(model: ItemModel): Item {
-        return new Item(model.id, model.name, model.price, model.quantity);
+        return new Item(String(model.id), model.name, model.price, model.quantity);
     }
 
     static toModel(entity: Item): ItemModel {
-        return new ItemModel(entity.id, entity.name, entity.price, entity.quantity);
+        return new ItemModel(Number(entity.id), entity.name, entity.price, entity.quantity);
     }
 }

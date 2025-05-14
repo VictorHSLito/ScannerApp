@@ -1,6 +1,6 @@
-import { IItemRepository } from "../interfaces/IItemRepository";
+import { IItemRepository } from "../../interfaces/IItemRepository";
 
-export class RemoveItemUseCase {
+export class RemoveItem {
     private _repo: IItemRepository;
 
     constructor (repo: IItemRepository) {

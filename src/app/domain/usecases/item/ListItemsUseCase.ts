@@ -1,7 +1,7 @@
-import { Item } from "../entities/Item";
-import { IItemRepository } from "../interfaces/IItemRepository";
+import { Item } from "../../entities/Item";
+import { IItemRepository } from "../../interfaces/IItemRepository";
 
-export class ListItemsUseCase {
+export class ListItems {
     private _repo: IItemRepository;
 
     constructor (repo: IItemRepository) {

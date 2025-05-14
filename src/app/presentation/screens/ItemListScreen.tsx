@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { ItemLocalDataSource } from '../../data/datasources/local/ItemLocalDataSource';
 import { ItemModel } from '../../data/model/ItemModel';
+import { ItemController } from '../controllers/ItemController';
+import IconButton from '../components/buttons/IconButton';
 
 const ItemListScreen = () => {
   const [items, setItems] = useState<ItemModel[]>([]);
+
+  const controller = new ItemController;
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -22,11 +26,22 @@ const ItemListScreen = () => {
 
   const renderItem = ({ item }: { item: ItemModel }) => (
     <View style={styles.itemContainer}>
-      <Text style={styles.itemText}>ID: {item.id}</Text>
-      <Text style={styles.itemText}>Nome: {item.name}</Text>
-      <Text style={styles.itemText}>Preço: {item.price}</Text>
-      <Text style={styles.itemText}>Quantidade: {item.quantity}</Text>
+      <View>
+        <Text style={styles.itemText}>Nome: {item.name}</Text>
+        <Text style={styles.itemText}>Preço: R$ {item.price}</Text>
+        <Text style={styles.itemText}>Quantidade: {item.quantity}</Text>
+        <Text style={styles.itemText}>Total: R$ {(item.price * item.quantity).toFixed(2)}</Text>
+      </View>
+      <IconButton
+        icon="edit"
+        onPress={() => controller.deleteItem(String(item.id))}
+      />
+      <IconButton
+        icon="delete"
+        onPress={() => controller.deleteItem(String(item.id))}
+      />
     </View>
+
   );
 
   return (
@@ -35,7 +50,7 @@ const ItemListScreen = () => {
       <FlatList
         data={items}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => String(item.id)}
       />
     </View>
   );
