@@ -7,7 +7,7 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
-const CustomButton: React.FC<Props> = ({ title, onPress, style }) => (
+const TextButton: React.FC<Props> = ({ title, onPress, style }) => (
   <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
     <Text style={styles.text}>{title}</Text>
   </TouchableOpacity>
@@ -27,4 +27,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CustomButton;
+export default TextButton;
