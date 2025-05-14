@@ -3,11 +3,8 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import TextButton from "../components/buttons/TextButton";
+import { StackParamList } from "../navigation/AppNavigator";
 
-type StackParamList = {
-    Add: undefined;
-    List: undefined;
-}
 
 const HomeScreen = () => {
     const navigation = useNavigation<NativeStackNavigationProp<StackParamList>>();

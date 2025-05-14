@@ -4,9 +4,14 @@ import { ItemLocalDataSource } from '../../data/datasources/local/ItemLocalDataS
 import { ItemModel } from '../../data/model/ItemModel';
 import { ItemController } from '../controllers/ItemController';
 import IconButton from '../components/buttons/IconButton';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+import { StackParamList } from '../navigation/AppNavigator';
+
 
 const ItemListScreen = () => {
   const [items, setItems] = useState<ItemModel[]>([]);
+  const navigation = useNavigation<NativeStackNavigationProp<StackParamList, 'List'>>();
 
   const controller = new ItemController;
 
@@ -36,7 +41,7 @@ const ItemListScreen = () => {
       <View style={styles.buttonsContainer}>
         <IconButton
           icon="edit"
-          onPress={() => controller.deleteItem(String(item.id))}
+          onPress={() => navigation.navigate('Edit', {item})}
         />
         <IconButton
           icon="delete"
