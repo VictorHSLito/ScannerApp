@@ -1,12 +1,15 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native';
-import ItemListScreen from '../presentation/screens/ItemListScreen';
+import AppRoutes from '../presentation/navigation/AppNavigator';
+import { DataBaseHelper } from '../data/datasources/local/DataBaseHelper';
 
 
 const App = () => {
+  DataBaseHelper.init();
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ItemListScreen />
+      <AppRoutes/>
     </SafeAreaView>
   );
 };
