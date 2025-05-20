@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { ItemLocalDataSource } from '../../data/datasources/local/ItemLocalDataSource';
 import { ItemModel } from '../../data/model/ItemModel';
 import { ItemController } from '../controllers/ItemController';
@@ -47,7 +47,10 @@ const ItemListScreen = () => {
         />
         <IconButton
           icon="delete"
-          onPress={() => controller.deleteItem(String(item.id))}
+          onPress={async () => {
+            await controller.deleteItem(String(item.id));
+            fetchItems(); // atualiza a lista logo após a exclusão
+          }}
         />
       </View>
     </View>
