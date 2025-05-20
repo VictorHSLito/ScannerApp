@@ -54,6 +54,8 @@ const ItemListScreen = () => {
 
   );
 
+  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -61,6 +63,10 @@ const ItemListScreen = () => {
         renderItem={renderItem}
         keyExtractor={(item) => String(item.id)}
       />
+
+      <View style={styles.fab}>
+        <Text style={styles.fabText}> Total: R$ {total.toFixed(2)} </Text>
+      </View>
     </View>
   );
 };
@@ -94,7 +100,28 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-  }
+  },
+  fab: {
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
+    right: 20,
+    backgroundColor: '#3498db',
+    paddingVertical: 15,
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+  },
+  fabText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
 });
 
 export default ItemListScreen;
