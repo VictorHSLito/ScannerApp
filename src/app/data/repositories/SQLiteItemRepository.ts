@@ -14,7 +14,7 @@ export class SQLiteItemRepository implements IItemRepository {
         } catch (error) {
             console.log("There was a problem when tried to save item: ", error);
             throw new Error("Method not implemented.");
-        }   
+        }
     }
 
     async listItems(): Promise<Item[] | null> {
@@ -24,7 +24,7 @@ export class SQLiteItemRepository implements IItemRepository {
         } catch (error) {
             console.log();
             throw new Error("Method not implemented.");
-        }     
+        }
     }
 
 
@@ -35,13 +35,24 @@ export class SQLiteItemRepository implements IItemRepository {
             throw new Error("Method not implemented.");
         }
     }
-    
-    
+
+
     async cleanItems(): Promise<void> {
         try {
             await this.dataSource.clearItems();
         } catch (error) {
             throw new Error("Method not implemented.");
+        }
+    }
+
+    async editItem(item: Item): Promise<Item | null> {
+        try {
+            const model = ItemMapper.toModel(item);
+            await this.dataSource.editItem(model);
+            return item;
+        } catch (error) {
+            console.log("Erro ao editar item:", error);
+            throw new Error("Não foi possível editar o item.");
         }
     }
 

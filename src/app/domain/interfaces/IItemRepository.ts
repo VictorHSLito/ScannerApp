@@ -5,4 +5,5 @@ export interface IItemRepository {
     listItems(): Promise<Item[] | null>;
     removeItem(id: string): Promise<void>;
     cleanItems(): Promise<void>;
+    editItem(item: Item): Promise<Item | null>;
 }

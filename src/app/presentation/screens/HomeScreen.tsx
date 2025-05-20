@@ -3,18 +3,15 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import TextButton from "../components/buttons/TextButton";
+import { StackParamList } from "../navigation/AppNavigator";
 
-type StackParamList = {
-    Add: undefined;
-    List: undefined;
-}
 
 const HomeScreen = () => {
     const navigation = useNavigation<NativeStackNavigationProp<StackParamList>>();
 
     return (
     <View style={styles.container}>
-      <Text style={styles.title}>Bem-vindo!</Text>
+      <Text style={styles.title}>Bem-vindo(a)!</Text>
       <TextButton
         title="Cadastrar novo item"
         onPress={() => navigation.navigate('Add')}
