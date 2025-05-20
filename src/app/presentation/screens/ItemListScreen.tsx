@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { ItemLocalDataSource } from '../../data/datasources/local/ItemLocalDataSource';
 import { ItemModel } from '../../data/model/ItemModel';
 import { ItemController } from '../controllers/ItemController';
 import IconButton from '../components/buttons/IconButton';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackParamList } from '../navigation/AppNavigator';
 
 
@@ -15,20 +15,22 @@ const ItemListScreen = () => {
 
   const controller = new ItemController;
 
-  useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const dataSource = new ItemLocalDataSource();
-        const itemsFromDb = await dataSource.listItems();
-        console.log("Items carregados: ", itemsFromDb);
-        setItems(itemsFromDb); // Armazena os itens no estado
-      } catch (error) {
-        console.error("Erro ao carregar os itens:", error);
-      }
-    };
+  const fetchItems = async () => {
+    try {
+      const dataSource = new ItemLocalDataSource();
+      const itemsFromDb = await dataSource.listItems();
+      console.log("Items carregados: ", itemsFromDb);
+      setItems(itemsFromDb);
+    } catch (error) {
+      console.error("Erro ao carregar os itens:", error);
+    }
+  };
 
-    fetchItems(); // Carrega os itens assim que a tela for renderizada
-  }, []); // Esse efeito será executado uma vez, quando o componente for montado
+  useFocusEffect(
+    useCallback(() => {
+      fetchItems();
+    }, [])
+  );
 
   const renderItem = ({ item }: { item: ItemModel }) => (
     <View style={styles.itemContainer}>
@@ -41,7 +43,7 @@ const ItemListScreen = () => {
       <View style={styles.buttonsContainer}>
         <IconButton
           icon="edit"
-          onPress={() => navigation.navigate('Edit', {item})}
+          onPress={() => navigation.navigate('Edit', { item })}
         />
         <IconButton
           icon="delete"

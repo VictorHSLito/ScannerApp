@@ -11,7 +11,7 @@ const HomeScreen = () => {
 
     return (
     <View style={styles.container}>
-      <Text style={styles.title}>Bem-vindo!</Text>
+      <Text style={styles.title}>Bem-vindo(a)!</Text>
       <TextButton
         title="Cadastrar novo item"
         onPress={() => navigation.navigate('Add')}
