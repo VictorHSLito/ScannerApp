@@ -27,4 +27,9 @@ export class ItemLocalDataSource {
         const db = DataBaseHelper.connection;
         await db.runAsync (`DELETE FROM items`);
     }
+
+    async editItem(model: ItemModel): Promise<void> {
+        const db = DataBaseHelper.connection;
+        await db.runAsync (`UPDATE items SET name = ?, price = ?, quantity = ? WHERE id = ? `, model.name, model.price, model.quantity, model.id);
+    }
 }

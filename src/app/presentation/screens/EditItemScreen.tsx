@@ -29,7 +29,7 @@ export default function EditItemScreen() {
       const parsedPrice = parseFloat(price.replace(',', '.'));
       const parsedQuantity = parseInt(quantity);
       const updatedItem = new ItemModel(item.id, name, parsedPrice, parsedQuantity);
-      // await controller.saveItem(updatedItem); TROCAR ESSE MÉTODO PARA O UPDATE
+      await controller.updateItem(updatedItem); 
       Alert.alert('Sucesso', 'Item atualizado com sucesso!');
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível atualizar o item.');
