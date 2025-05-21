@@ -1,3 +1,3 @@
-export class ScanPrice {
+export class ScanPriceUseCase {
 
 }
