@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": "./build",
     "emitDeclarationOnly": true,
-    "declaration": true
+    "declaration": true,
+    "esModuleInterop": true
   },
   "include": ["./src"],
   "exclude": ["**/__mocks__/*", "**/__tests__/*"]

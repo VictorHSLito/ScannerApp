@@ -8,48 +8,32 @@ import { ItemLocalDataSource } from "../../data/datasources/local/ItemLocalDataS
 import { exportAsPDF } from "../../utils/export/ExportAsPDF";
 import { exportAsJSON } from "../../utils/export/ExportAsJSON";
 
-import * as IntentLauncher from "expo-intent-launcher"; 
-import { Linking, Platform  } from "react-native";
-
 
 const HomeScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<StackParamList>>();
   const [modalVisible, setModalVisible] = useState(false);
   const dataSource = new ItemLocalDataSource();
 
-  const handleExport = async (format: "pdf" | "json") => {
+  const handleExport = async (format: 'pdf' | 'json') => {
     try {
       const items = await dataSource.listItems();
       if (items.length === 0) {
-        Alert.alert("Aviso!", "Sua lista não contém nenhum item. Lista vazia!");
+        Alert.alert('Aviso!', 'Sua lista não contém nenhum item.');
         return;
       }
 
-      let fileUri = "";
-      if (format === "pdf") {
-        await exportAsPDF(items);
+      if (format === 'pdf') {
+        await exportAsPDF(items); // Função já lida com compartilhar
       } else {
-        await exportAsJSON(items);
+        await exportAsJSON(items); // Função já lida com compartilhar
       }
 
-      Alert.alert("Sucesso", `Arquivo salvo em:\n${fileUri}`);
-
-      if (Platform.OS === "android") {
-      await IntentLauncher.startActivityAsync("android.intent.action.VIEW", {
-        data: "file://" + fileUri,
-        flags: 1,
-      });
-      } else {
-        await Linking.openURL(fileUri);
-      }
-
-      setModalVisible(false);
-
+      Alert.alert('Sucesso', `Arquivo exportado e compartilhado com sucesso!`);
     } catch (error) {
       console.error(error);
-      Alert.alert("Erro", "Erro ao exportar.");
+      Alert.alert('Erro', 'Não foi possível gerar ou compartilhar o arquivo.');
     }
-  }
+  };
 
 
   return (
