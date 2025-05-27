@@ -22,16 +22,17 @@ const HomeScreen = () => {
         return;
       }
 
+      let fileUri = '';
       if (format === 'pdf') {
-        await exportAsPDF(items); // Função já lida com compartilhar
+        fileUri = await exportAsPDF(items);
       } else {
-        await exportAsJSON(items); // Função já lida com compartilhar
+        fileUri = (await exportAsJSON(items)) ?? '';
       }
 
-      Alert.alert('Sucesso', `Arquivo exportado e compartilhado com sucesso!`);
+      Alert.alert('Sucesso', `Arquivo salvo com sucesso.`);
     } catch (error) {
       console.error(error);
-      Alert.alert('Erro', 'Não foi possível gerar ou compartilhar o arquivo.');
+      Alert.alert('Erro', 'Não foi possível gerar o arquivo para exportação.');
     }
   };
 

@@ -1,37 +1,44 @@
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
-import { ItemModel } from '../../data/model/ItemModel';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 
-export async function exportAsJSON(items: ItemModel[]) {
-  console.log('Iniciando exportação JSON...');
+export async function exportAsJSON(data: any, fileName = `lista_itens_${Date.now()}.json`): Promise<string | undefined> {
+  try {
+    console.log('Iniciando exportação JSON...');
 
-  let totalCompra = 0;
-  const itemsComTotal = items.map((item) => {
-    const total = item.price * item.quantity;
-    totalCompra += total;
-    return { ...item, total };
-  });
+    const jsonString = JSON.stringify(data, null, 2);
+    const localUri = FileSystem.cacheDirectory + fileName;
 
-  const exportData = { items: itemsComTotal, totalCompra };
-  const json = JSON.stringify(exportData, null, 2);
+    await FileSystem.writeAsStringAsync(localUri, jsonString, { encoding: FileSystem.EncodingType.UTF8 });
+    console.log('JSON gerado em:', localUri);
 
-  const fileUri = FileSystem.cacheDirectory + 'lista_itens.json';
-  console.log('Escrevendo JSON temporário em:', fileUri);
-  await FileSystem.writeAsStringAsync(fileUri, json, {
-    encoding: FileSystem.EncodingType.UTF8,
-  });
+    if (Platform.OS === 'android') {
+      const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+      if (!permissions.granted) {
+        Alert.alert('Permissão negada', 'Não foi possível obter permissão para acessar o armazenamento.');
+        return;
+      }
 
-  if (!(await Sharing.isAvailableAsync())) {
-    Alert.alert('Aviso', 'O compartilhamento não está disponível neste dispositivo.');
+      const fileUriInDownload = await FileSystem.StorageAccessFramework.createFileAsync(
+        permissions.directoryUri,
+        fileName,
+        'application/json'
+      );
+
+      const fileContent = await FileSystem.readAsStringAsync(localUri, { encoding: FileSystem.EncodingType.UTF8 });
+      await FileSystem.writeAsStringAsync(fileUriInDownload, fileContent, { encoding: FileSystem.EncodingType.UTF8 });
+
+      Alert.alert('Sucesso', 'Arquivo JSON salvo no Downloads!');
+      console.log('Arquivo JSON salvo em:', fileUriInDownload);
+      return fileUriInDownload;
+    } else {
+      await Sharing.shareAsync(localUri);
+      return localUri;
+    }
+  } catch (error) {
+    console.error('Erro na exportação JSON:', error);
+    Alert.alert('Erro', 'Não foi possível exportar o JSON.');
     return;
   }
-
-  console.log('Abrindo diálogo de compartilhamento...');
-  await Sharing.shareAsync(fileUri, {
-    mimeType: 'application/json',
-    dialogTitle: 'Compartilhar Lista de Itens (JSON)',
-  });
-
-  console.log('Exportação concluída e compartilhada.');
 }
+
