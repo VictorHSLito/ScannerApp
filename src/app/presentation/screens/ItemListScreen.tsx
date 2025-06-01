@@ -36,9 +36,9 @@ const ItemListScreen = () => {
     <View style={styles.itemContainer}>
       <View style={styles.itemInfo}>
         <Text style={styles.itemText}>Nome: {item.name}</Text>
-        <Text style={styles.itemText}>Preço: R$ {item.price.toFixed(2)}</Text>
+        <Text style={styles.itemText}>Preço: R$ {(item.price ?? 0).toFixed(2)}</Text>
         <Text style={styles.itemText}>Quantidade: {item.quantity}</Text>
-        <Text style={styles.itemText}>Total: R$ {(item.price * item.quantity).toFixed(2)}</Text>
+        <Text style={styles.itemText}>Total: R$ {((item.price ?? 0 ) * (item.quantity ?? 0) ).toFixed(2)}</Text>
       </View>
       <View style={styles.buttonsContainer}>
         <IconButton
