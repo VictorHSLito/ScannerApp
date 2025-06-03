@@ -1,24 +1,28 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Modal, TouchableOpacity, Alert } from "react-native";
 import TextButton from "../components/buttons/TextButton";
 import { StackParamList } from "../navigation/AppNavigator";
 import { ItemLocalDataSource } from "../../data/datasources/local/ItemLocalDataSource";
 import { exportAsPDF } from "../../utils/export/ExportAsPDF";
 import { exportAsJSON } from "../../utils/export/ExportAsJSON";
+import { ClearListItems } from "../../domain/usecases/item/ClearListItemsUseCase";
+import { SQLiteItemRepository } from "../../data/repositories/SQLiteItemRepository";
 
 
 const HomeScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<StackParamList>>();
   const [modalVisible, setModalVisible] = useState(false);
   const dataSource = new ItemLocalDataSource();
+  const [clearModalVisible, setClearModalVisible] = useState(false);
 
   const handleExport = async (format: 'pdf' | 'json') => {
     try {
       const items = await dataSource.listItems();
       if (items.length === 0) {
         Alert.alert('Aviso!', 'Sua lista não contém nenhum item.');
+        setModalVisible(false);
         return;
       }
 
@@ -30,11 +34,37 @@ const HomeScreen = () => {
       }
 
       Alert.alert('Sucesso', `Arquivo salvo com sucesso.`);
+      setModalVisible(false);
     } catch (error) {
       console.error(error);
       Alert.alert('Erro', 'Não foi possível gerar o arquivo para exportação.');
+      setModalVisible(false);
     }
   };
+
+ 
+
+  const handleClearList = async () => {
+    try {
+      const items = await dataSource.listItems();
+      if (items.length === 0) {
+        Alert.alert('Aviso', 'Lista vazia!');
+        setClearModalVisible(false);
+        return;
+      }
+
+      const repository = new SQLiteItemRepository();
+      const clearListUseCase = new ClearListItems(repository);
+      await clearListUseCase.execute();
+
+      Alert.alert('Sucesso', 'Lista limpa com sucesso!');
+      setClearModalVisible(false);
+
+    } catch (error) {
+      Alert.alert('Erro', 'Não foi possível limpar a lista. Tente novamente.');
+      console.error("Erro ao limpar lista:", error);
+    }
+  }
 
 
   return (
@@ -54,7 +84,6 @@ const HomeScreen = () => {
         title="Salvar lista"
         onPress={() => setModalVisible(true)}
       />
-
 
       <Modal
         visible={modalVisible}
@@ -91,6 +120,41 @@ const HomeScreen = () => {
 
       </Modal>
 
+      <TextButton
+        title="Limpar Lista"
+        onPress={() => setClearModalVisible(true)}
+      />
+
+      <Modal
+        visible={clearModalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setClearModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={[styles.modalTitleClear]}>Tem certeza que deseja limpar a lista?</Text>
+            <Text style={styles.modalText}>Limpando sua lista, todos os itens serão excluídos e não será possível reverter!</Text>
+
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={handleClearList}
+            >
+              <Text style={styles.modalButtonText}>Sim, limpar lista</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.modalButton, { backgroundColor: "#ccc" }]}
+              onPress={() => setClearModalVisible(false)}
+            >
+              <Text style={styles.modalButtonText}>Cancelar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+      </Modal>
+
+
     </View>
   );
 };
@@ -102,8 +166,9 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 24,
-    marginBottom: 20,
+    fontWeight: "bold",
+    fontSize: 30,
+    marginBottom: 15,
     textAlign: 'center',
   },
 
@@ -118,11 +183,20 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 20,
     borderRadius: 10,
-    alignItems: "center",
+    alignItems: "flex-start",
   },
   modalTitle: {
+    fontWeight: "bold",
     fontSize: 18,
     marginBottom: 15,
+  },
+  modalTitleClear: {
+    fontWeight: "bold",
+    fontSize: 15,
+    marginBottom: 7,
+  },
+  modalText: {
+    fontSize: 13,
   },
   modalButton: {
     backgroundColor: "#3498db",
